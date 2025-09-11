@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body style="
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+        margin: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    ">
+        <h2 style="
+            text-align: center;
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: -1px;
+        ">Login</h2>
+        
+        <form method="post" style="display: flex; flex-direction: column;">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 25px; position: relative;">
+                <label style="
+                    display: block;
+                    color: #555;
+                    font-size: 14px;
+                    font-weight: 500;
+                    margin-bottom: 8px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                ">Username</label>
+                <input type="text" name="username" style="
+                    width: 100%;
+                    padding: 15px 20px;
+                    border: 2px solid #e1e5e9;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    transition: all 0.3s ease;
+                    background: #f8f9fa;
+                    box-sizing: border-box;
+                " 
+                onfocus="this.style.borderColor='#667eea'; this.style.background='white'; this.style.boxShadow='0 0 0 3px rgba(102, 126, 234, 0.1)'"
+                onblur="this.style.borderColor='#e1e5e9'; this.style.background='#f8f9fa'; this.style.boxShadow='none'">
+            </div>
+            
+            <div style="margin-bottom: 30px; position: relative;">
+                <label style="
+                    display: block;
+                    color: #555;
+                    font-size: 14px;
+                    font-weight: 500;
+                    margin-bottom: 8px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                ">Password</label>
+                <input type="password" name="password" style="
+                    width: 100%;
+                    padding: 15px 20px;
+                    border: 2px solid #e1e5e9;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    transition: all 0.3s ease;
+                    background: #f8f9fa;
+                    box-sizing: border-box;
+                "
+                onfocus="this.style.borderColor='#667eea'; this.style.background='white'; this.style.boxShadow='0 0 0 3px rgba(102, 126, 234, 0.1)'"
+                onblur="this.style.borderColor='#e1e5e9'; this.style.background='#f8f9fa'; this.style.boxShadow='none'">
+            </div>
+            
+            <button type="submit" style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 18px 24px;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-top: 10px;
+            "
+            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 20px rgba(102, 126, 234, 0.3)'"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+            onmousedown="this.style.transform='translateY(0)'"
+            >Login</button>
+        </form>
+        
+        <div style="
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        ">
+        
+        </div>
+    </div>
+</body>
+</html>

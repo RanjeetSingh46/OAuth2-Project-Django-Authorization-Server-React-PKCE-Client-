@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Fixed PKCE Implementation</title>
+</head>
+<body>
+    <h1>PKCE Test</h1>
+    <button onclick="testPKCE()">Test PKCE</button>
+    <div id="results"></div>
+
+    <script>
+        // Fixed PKCE implementation from pkce.js
+        function base64urlencode(a){
+            return btoa(String.fromCharCode.apply(null,new Uint8Array(a)))
+                .replace(/\+/g,'-')
+                .replace(/\//g,'_')
+                .replace(/=+$/,'');
+        }
+
+        async function sha256(data){
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return hash;
+        }
+
+        function generateRandomString(length=64){
+            const arr = new Uint8Array(length);
+            crypto.getRandomValues(arr);
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+            let out = '';
+            for(let i = 0; i < length; i++){
+                out += chars[arr[i] % chars.length];
+            }
+            return out;
+        }
+
+        async function pkceChallengeFromVerifier(v){
+            const enc = new TextEncoder();
+            const data = enc.encode(v);
+            const digest = await sha256(data);
+            return base64urlencode(digest);
+        }
+
+        async function generatePKCECodes(){
+            const verifier = generateRandomString(64);
+            const challenge = await pkceChallengeFromVerifier(verifier);
+            return {verifier, challenge};
+        }
+
+        // Test function
+        async function testPKCE() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Testing PKCE...</h2>';
+
+            try {
+                // Test with a known verifier to compare with server
+                const knownVerifier = 'test_verifier_12345_abcdef_this_is_a_test_verifier_for_pkce_validation';
+                const knownChallenge = await pkceChallengeFromVerifier(knownVerifier);
+                
+                resultsDiv.innerHTML += `<p><strong>Known verifier test:</strong></p>`;
+                resultsDiv.innerHTML += `<p>Verifier: ${knownVerifier}</p>`;
+                resultsDiv.innerHTML += `<p>Challenge: ${knownChallenge}</p>`;
+                resultsDiv.innerHTML += `<p>Expected (from Python): 5wohxaBmo2uZCWXCEsRWwMcI4vnxPh5JYfXLfaemIDY</p>`;
+                resultsDiv.innerHTML += `<p><strong>Match: ${knownChallenge === '5wohxaBmo2uZCWXCEsRWwMcI4vnxPh5JYfXLfaemIDY' ? 'YES ✓' : 'NO ✗'}</strong></p>`;
+
+                // Generate new codes
+                const codes = await generatePKCECodes();
+                resultsDiv.innerHTML += `<h3>Generated PKCE Codes:</h3>`;
+                resultsDiv.innerHTML += `<p>Verifier: ${codes.verifier}</p>`;
+                resultsDiv.innerHTML += `<p>Challenge: ${codes.challenge}</p>`;
+                resultsDiv.innerHTML += `<p>Verifier Length: ${codes.verifier.length}</p>`;
+                resultsDiv.innerHTML += `<p>Challenge Length: ${codes.challenge.length}</p>`;
+
+                // Verify round-trip
+                const verifyChallenge = await pkceChallengeFromVerifier(codes.verifier);
+                resultsDiv.innerHTML += `<p><strong>Round-trip verification: ${codes.challenge === verifyChallenge ? 'PASS ✓' : 'FAIL ✗'}</strong></p>`;
+
+            } catch (error) {
+                resultsDiv.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error('PKCE test error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
