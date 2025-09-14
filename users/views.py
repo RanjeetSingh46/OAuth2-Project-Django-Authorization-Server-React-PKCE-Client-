@@ -30,6 +30,18 @@ class RoleListView(APIView):
         data = [{'id':u.id,'username':u.username,'role':u.role} for u in users]
         return Response(data)
 
+
+
+class ProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        return Response({
+            "username": user.username,
+            "email": user.email,
+            "is_staff": user.is_staff,
+            "roles": [g.name for g in user.groups.all()],
+        })
 class ValidateTokenView(APIView):
     permission_classes = [permissions.AllowAny]
     def post(self, request):

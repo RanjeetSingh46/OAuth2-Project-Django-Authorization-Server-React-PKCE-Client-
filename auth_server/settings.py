@@ -2,9 +2,10 @@ import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me-in-dev')
-DEBUG = True  
+
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 INSTALLED_APPS = [
+    'otp_grant',
     'django.contrib.admin','django.contrib.auth','django.contrib.contenttypes',
     'django.contrib.sessions','django.contrib.messages','django.contrib.staticfiles',
     'rest_framework','oauth2_provider','corsheaders','users','client_backend',
@@ -32,6 +33,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 }
 OAUTH2_PROVIDER = {
+    # 'OAUTH2_VALIDATOR_CLASS': 'otp_grant.oauth2_validators.OTPGrantValidator',
+    'OAUTH2_VALIDATOR_CLASS': 'users.oauth_validators.OTPGrantValidator',
     'ACCESS_TOKEN_EXPIRE_SECONDS': int(os.environ.get('ACCESS_TOKEN_EXPIRE_SECONDS', 3600)),
     'REFRESH_TOKEN_EXPIRE_SECONDS': int(os.environ.get('REFRESH_TOKEN_EXPIRE_SECONDS', 60*60*24*14)),
     'AUTHORIZATION_CODE_EXPIRE_SECONDS': int(os.environ.get('AUTHORIZATION_CODE_EXPIRE_SECONDS', 300)),
@@ -106,3 +109,10 @@ LOGGING = {
         },
     },
 }
+
+# Service API key for trusted server-to-server calls
+import os
+SERVICE_API_KEY = "Zi9_p8gUaLUfUXzHH4WcW6ITjjRi9l2U4ZO37mvV0og" # change SERVICE_API_KEY
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

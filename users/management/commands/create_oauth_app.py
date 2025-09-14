@@ -15,7 +15,7 @@ class Command(BaseCommand):
             name='Example PKCE Client',
             client_type=Application.CLIENT_PUBLIC,
             authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
-            redirect_uris='http://localhost:3000/callback',
+            redirect_uris='http://localhost:3000/login',
             user=admin
         )
         self.stdout.write(self.style.SUCCESS(f'Client id: {app.client_id}'))
